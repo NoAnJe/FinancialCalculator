@@ -39,7 +39,7 @@ export function textInput(label, textID) {
 export function checkboxInput(label, boxID) {
   return (
     <>
-      <label for={boxID}>{label}</label>
+  +    <label for={boxID}>{label}</label>
       <input type="checkbox" id={boxID} name={boxID} />
     </>
   );
