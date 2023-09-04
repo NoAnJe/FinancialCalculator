@@ -1,46 +1,38 @@
 import logo from './logo.svg';
 import './App.css';
 import React from 'react';
-import {dateInput, buttonInput, goalInput} from './InputFunctions';
+import {dateInput, buttonInput, createFinancialGoal} from './InputFunctions';
+//import { clickTest } from './ActionFunctions';
+import {GoalUpdate, GoalUpdateComparator, FinancialGoal, FinancialInputs}
+    from './Definitions.js';
 
-// // 
-// <header className="App-header">
-// <img src={logo} className="App-logo" alt="logo" />
-// <p>
-//   Edit <code>src/App.js</code> and save to reload.
-// </p>
-// <a
-//   className="App-link"
-//   href="https://reactjs.org"
-//   target="_blank"
-//   rel="noopener noreferrer"
-// >
-//   Learn React
-// </a>
+let gFinancialGoals = [];
+// gFinancialInputs = [];
+
+// function declareFinancialInputs() {
+//   gFinancialInputs.push(new FinancialInputs());
+//   // TODO : Create Accordion Element
+// }
 
 
-// </header>
+function declareFinancialGoals() {
+  gFinancialGoals.push(new FinancialGoal());
+  // TODO : Create Accordion Element
+  return (
+    <>{createFinancialGoal(gFinancialGoals[0], 0)}</>
+  );
+}
+
 
 function App() {
   return (
     <div className="App">
       <dateInput />
-      <buttonInput buttonID="addGoal" buttonText="Add a new goal" />
-      {/* <buttonInput buttonID="addGoal" buttonText="Add a new goal" callbackFunction={dummyFunction} /> */}
+      {buttonInput("addGoal", "Add a new goal")}
+      {declareFinancialGoals()}
     </div>
   );
 
-
-  /*
-  return (
-    // Set up initial outline of starting dates
-    <dateInput dateID="startDate" dateText="Starting Date" />
-    <dateInput dateID="endDate" dateText="End Date of Calculations" />
-    <dateInput dateID="firstPayday" dateText="First Date of Paycheck" />
-
-    <buttonInput
-  )
-  */
 }
 
 export default App;
