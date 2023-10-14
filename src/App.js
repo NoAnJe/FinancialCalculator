@@ -5,6 +5,7 @@ import {dateInput, buttonInput, createFinancialGoal} from './InputFunctions';
 //import { clickTest } from './ActionFunctions';
 import {GoalUpdate, GoalUpdateComparator, FinancialGoal, FinancialInputs}
     from './Definitions.js';
+import {GoalCreation} from './GoalDesign';
 
 let gFinancialGoals = [];
 // gFinancialInputs = [];
@@ -15,11 +16,16 @@ let gFinancialGoals = [];
 // }
 
 
-function declareFinancialGoals() {
-  gFinancialGoals.push(new FinancialGoal());
+function DeclareFinancialGoals() {
+  let startGoal = new FinancialGoal();
+  gFinancialGoals.push(startGoal);
+  startGoal.setStartingAmount(100);
+  console.log(gFinancialGoals);
   // TODO : Create Accordion Element
   return (
-    <>{createFinancialGoal(gFinancialGoals[0], 0)}</>
+    <div>
+      <GoalCreation goal={gFinancialGoals[0]} />
+    </div>
   );
 }
 
@@ -27,9 +33,9 @@ function declareFinancialGoals() {
 function App() {
   return (
     <div className="App">
-      <dateInput />
-      {buttonInput("addGoal", "Add a new goal")}
-      {declareFinancialGoals()}
+      {/* {buttonInput("addGoal", "Add a new goal")} */}
+      {/* {declareFinancialGoals()} */}
+      <DeclareFinancialGoals />
     </div>
   );
 

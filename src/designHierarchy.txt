@@ -1,0 +1,18 @@
+This is a design of the components and their hierarchy.
+
+->Input
+└-->Goals
+  └-->Add New Goal
+  └-->Goal Table
+    └-->Goal
+      └-->Starting Amount
+      └-->Goal Amount
+      └-->Annual Goal
+      └-->Percentage Growth Annually
+      └-->Goal Updates Table
+        └-->Amount/Percentage of income
+        └-->Amount of goal to reach
+        └-->Delete Goal Update
+      └-->Add Goal Update
+      └-->Delete Goal
+└-->

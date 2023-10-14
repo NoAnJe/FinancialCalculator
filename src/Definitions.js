@@ -1,3 +1,5 @@
+import React, {useState} from 'react';
+
 /**
  * A simple enum to define how often one is paid.
  */
@@ -96,16 +98,20 @@ export function GoalUpdateComparator(a, b) {
  */
 export class FinancialGoal {
     // Variables
-    #amount;
-    #isAnnual = true;
-    #usesPercentages = true;
-    #goalUpdates = [];
-    #goalName = "";
+    #amount = useState(0);
+    #isAnnual = useState(true);
+    #usesPercentages = useState(true);
+    #goalUpdates = new Array();
+    // [goalName, setGoalName];// = useState('DefaultGoal');
+    goalName;
+    setGoalName;
+    #startingValue = useState(0);
 
     // Constructor
     constructor() {
-        this.#amount = 0;
+        // this.#amount = 0;
         this.#goalUpdates.push(new GoalUpdate(0))
+        [goalName, setGoalName] = useState('DefaultGoal');
     }
 
     // Getters
@@ -138,12 +144,32 @@ export class FinancialGoal {
         return this.#usesPercentages;
     }
 
-    getName() {
-        return this.#goalName;
-    }
+    // getName() {
+    //     return this.#goalName;
+    // }
 
     getIndex() {
         return 0;
+    }
+
+    getStartValue() {
+        return this.#startingValue;
+    }
+
+    /**
+     * 
+     * @returns 
+     */
+    getGoalLevels() {
+        return this.#goalUpdates[0];
+    }
+
+    getGoalLevelsLength() {
+        return this.#goalUpdates.length;
+    }
+
+    getStartLevel() {
+        return this.#startingValue;
     }
 
     // Setters
@@ -195,8 +221,14 @@ export class FinancialGoal {
         this.#usesPercentages = usesPercentages;
     }
 
-    setName(name) {
-        this.#goalName = name;
+    // setName(name) {
+    //     console.log(typeof(name));
+    //     console.log(typeof(this.#goalName));
+    //     this.#goalName = name;
+    // }
+
+    setStartingAmount(startAmount) {
+        this.#startingValue = startAmount;
     }
 }
 
@@ -222,10 +254,6 @@ export class FinancialInput {
 
     getPayAmount() {
         return this.#payAmount;
-    }
-
-    getStartDate() {
-        return this.#startDate;
     }
 
     // Setters
