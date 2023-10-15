@@ -1,4 +1,16 @@
+import {TextField, Checkbox, FormControlLabel, MenuItem, Select, FormControl} from '@mui/material';
+// import {Checkbox} from '@mui/material/Checkbox';
 import React, {useState} from 'react';
+import { DatePicker } from '@mui/x-date-pickers';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import {
+    Unstable_NumberInput as NumberInput,
+    NumberInputProps,
+    numberInputClasses,
+  } from '@mui/base/Unstable_NumberInput';
 
 /**
  * A simple enum to define how often one is paid.
@@ -13,263 +25,208 @@ export const PayFrequencies = {
     Annually:   "annually"
 }
 
-/**
- * This is the Goal Update class, which defines whether 
- */
-export class GoalUpdate {
-    #amount;
-    #isPercentage = true;
-    #contributeAmount = 0;
 
-    constructor(newAmount) {
-        this.#amount = newAmount;
-    }
+export function FinancialGoal() {
+    const [goalValue, updateGoalValue] = useState(0);
+    const [isAnnual, updateIsAnnual] = useState(true);
+    const [usesPercentages, updateUsePercentages] = useState(true);
+    const [name, setName] = useState(null);
+    const [startValue, updateStartValue] = useState(0);
 
-    valueOf() {
-        return this.#amount;
-    }
-
-    // Getters
-    getGoal() {
-        return this.#amount;
-    }
-
-    getContribution() {
-        return this.#contributeAmount;
-    }
-
-    // Setters
-    updateGoal(newAmount) {
-        this.#amount = newAmount;
-    }
-
-    setContribution(contribution) {
-        this.#contributeAmount = contribution;
-    }
-
-    setPercentage(isValuePercentage) {
-        this.#isPercentage = isValuePercentage;
-    }
-
+    return (
+        <div>
+            <TextField 
+                value={name}
+                label="Goal"
+                onChange={(e) => { 
+                    setName(e.target.value); 
+                }} 
+                margin="normal"
+            /><br/>
+            <TextField 
+                value={goalValue} 
+                label="Total goal amount"
+                onChange={(e) => { 
+                    updateGoalValue(e.target.value); 
+                }} 
+                margin="normal"
+            /><br/>
+            <TextField 
+                value={startValue} 
+                label="Base value first time running goal"
+                onChange={(e) => { 
+                    updateStartValue(e.target.value); 
+                }} 
+                margin="normal"
+            /><br/>
+            <FormControlLabel
+                control={
+                    <Checkbox
+                        checked={usesPercentages}
+                        onChange={(e) => {
+                            updateUsePercentages(e.target.checked);
+                        }}
+                    />}
+                label="Use Percentage of Income"
+            />
+            <br/>
+            <FormControlLabel
+                control={
+                    <Checkbox
+                        checked={isAnnual}
+                        onChange={(e) => {
+                            updateIsAnnual(e.target.checked);
+                        }}
+                    />}
+                label="Is an annual goal; i.e. resets on Jan 1"
+            />
+        </div>
+    );
 }
 
-/**
- * Comparator for two GoalUpdate items
- * 
- * @param   {GoalUpdate} a The first GoalUpdate to be compared to
- * @param   {GoalUpdate} b The second GoalUpdate to compare to a
- * @returns Int to indicate whether they're equal, a should 
- */
-export function GoalUpdateComparator(a, b) {
-    // Ensure both of proper type
-    if (typeof a !== "GoalUpdate") {
-        throw new Error("ERROR: 'a' should of the type GoalUpdate!")
-    }
-    if (typeof b !== "GoalUpdate") {
-        throw new Error("ERROR: 'b' should of the type GoalUpdate!")
-    }
-
-    // If a amount is less than b amount, then a should come first (neg amount)
-    if (a.getGoal() < b.getGoal()) {
-        return -1;
-    }
-
-    // If b amount is less than a amount, then b should come first 
-    if (b.getGoal() < a.getGoal()) {
-        return 1;
-    }
-
-    // If both are equal, then check percentages
-    if (a.getContribution() < b.getContribution()) {
-        return -1;
-    }
-
-    if (b.getContribution() < a.getContribution()) {
-        return 1;
-    }
-
-    return 0;
+function PayFrequencyMenu() {
+    return (
+    <>
+    <MenuItem value={PayFrequencies.Once}>{PayFrequencies.Once}</MenuItem>
+    <MenuItem value={PayFrequencies.Daily}>{PayFrequencies.Daily}</MenuItem>
+    <MenuItem value={PayFrequencies.Weekly}>{PayFrequencies.Weekly}</MenuItem>
+    <MenuItem value={PayFrequencies.Biweekly}>{PayFrequencies.Biweekly}</MenuItem>
+    <MenuItem value={PayFrequencies.Monthly}>{PayFrequencies.Monthly}</MenuItem>
+    <MenuItem value={PayFrequencies.Quarterly}>{PayFrequencies.Quarterly}</MenuItem>
+    <MenuItem value={PayFrequencies.Annually}>{PayFrequencies.Annually}</MenuItem>
+    </>
+);
+    // return (
+    //     <>
+    //     <MenuItem value={PayFrequencies.Once}>{PayFrequencies.Once}</MenuItem>
+    //     <MenuItem value={PayFrequencies.Daily}>{PayFrequencies.Daily}</MenuItem>
+    //     <MenuItem value={PayFrequencies.Weekly}>{PayFrequencies.Weekly}</MenuItem>
+    //     <MenuItem value={PayFrequencies.Biweekly}>{PayFrequencies.Biweekly}</MenuItem>
+    //     <MenuItem value={PayFrequencies.Monthly}>{PayFrequencies.Monthly}</MenuItem>
+    //     <MenuItem value={PayFrequencies.Quarterly}>{PayFrequencies.Quarterly}</MenuItem>
+    //     <MenuItem value={PayFrequencies.Annually}>{PayFrequencies.Annually}</MenuItem>
+    //     </>
+    // );
 }
 
-/**
- * This is the class for the Financial Goals. They each contain a goal amount, a
- * definition of whether or not it is an annual goal, whether or not it uses
- * percentages to contribute, and an array of the individual goal levels.
- */
-export class FinancialGoal {
-    // Variables
-    #amount = useState(0);
-    #isAnnual = useState(true);
-    #usesPercentages = useState(true);
-    #goalUpdates = new Array();
-    // [goalName, setGoalName];// = useState('DefaultGoal');
-    goalName;
-    setGoalName;
-    #startingValue = useState(0);
+/*
+<DatePicker value={startDate} onChange={(e) => {
+                setStartDate(e.target.value);}
+            } />
+            <DatePicker value={endDate} onChange={(e) => {
+                setEndDate(e.target.value);}
+            }/>
+            <DatePicker value={firstPayday} onChange={(e) => {
+                setFirstPayday(e.target.value);}
+            }/>
+            <Select
+                labelId="SalaryFrequency"
+                label="Pay Frequency"
+                value={payFrequency}
+                onChange={(e) => {
+                    setPayFrequency(e.target.value);}
+                }
+            >
+                <PayFrequencyMenu />
+            </Select>*/
 
-    // Constructor
-    constructor() {
-        // this.#amount = 0;
-        this.#goalUpdates.push(new GoalUpdate(0))
-        [goalName, setGoalName] = useState('DefaultGoal');
-    }
+export function OverallDateInput() {
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+    const [firstPayday, setFirstPayday] = useState(null);
+    const [payFrequency, setPayFrequency] = useState(PayFrequencies.Biweekly);
 
-    // Getters
-    /**
-     * Get the total amount that this goal is working towards
-     * @returns Monetary goal amount
-     */
-    getGoal() {
-        return this.#amount;
-    }
-
-    /**
-     * Gets whether or not this is an annual goal. If the goal is annual, then
-     * when calculations are happening, it should "reset" to 0 at the start of
-     * the year.
-     * @returns Boolean True if happens annually, false if once
-     */
-    getIsAnnual() {
-        return this.#isAnnual;
-    }
-
-    /**
-     * Gets whether or not this uses a percentage of income - as opposed to raw
-     * monetary values - to contribute to the goal. An example might be that
-     * this would be True if someone is contributing 10% of their salary to a
-     * 401K, but False if someone is contributing $25/month to a rainy day fund.
-     * @returns Boolean True if uses percentage of income
-     */
-    getUsesPercentages() {
-        return this.#usesPercentages;
-    }
-
-    // getName() {
-    //     return this.#goalName;
-    // }
-
-    getIndex() {
-        return 0;
-    }
-
-    getStartValue() {
-        return this.#startingValue;
-    }
-
-    /**
-     * 
-     * @returns 
-     */
-    getGoalLevels() {
-        return this.#goalUpdates[0];
-    }
-
-    getGoalLevelsLength() {
-        return this.#goalUpdates.length;
-    }
-
-    getStartLevel() {
-        return this.#startingValue;
-    }
-
-    // Setters
-    /**
-     * Updates the total goal amount for this.
-     * @param {Integer} newAmount Updated amount for goal.
-     */
-    updateGoal(newAmount) {
-        this.#amount = newAmount;
-        let maxGoalIdx = this.#goalUpdates.length - 1;
-        this.#goalUpdates[maxGoalIdx].updateGoal(newAmount);
-    }
-
-    /**
-     * Add a new goal update level. These are defined as the levels at which
-     * one's goals will be met. For example, a $5,000 goal may have two levels,
-     * where one is contributing $250/month until $4,000 is reached, then only
-     * $100/month until the final value of $5,000 is reached.
-     */
-    addGoalUpdate() {
-        this.#goalUpdates.push(new GoalUpdate(0));
-        this.#goalUpdates.sort(GoalUpdateComparator);
-    }
-
-    /**
-     * Remove the specified goal update.
-     * @param {Integer} goalIndex Index to remove
-     */
-    removeGoalUpdate(goalIndex) {
-        this.#goalUpdates.splice(goalIndex, 1);
-    }
-
-    /**
-     * Define if this is an annual goal. An annual goal will reset on January 1,
-     * while a non-annual goal will continue, irregardless of date, until the
-     * final goal level is reached.
-     * @param {Boolean} isAnnualGoal 
-     */
-    setAnnual(isAnnualGoal) {
-        this.#isAnnual = isAnnualGoal;
-    }
-
-    /**
-     * Define whether or not this goal uses percentages of income, as opposed to
-     * raw monetary amounts.
-     * @param {Boolean} usesPercentages 
-     */
-    setUsesPercentages(usesPercentages) {
-        this.#usesPercentages = usesPercentages;
-    }
-
-    // setName(name) {
-    //     console.log(typeof(name));
-    //     console.log(typeof(this.#goalName));
-    //     this.#goalName = name;
-    // }
-
-    setStartingAmount(startAmount) {
-        this.#startingValue = startAmount;
-    }
+    return (
+        <div>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoContainer components={['DatePicker']}>
+                <DatePicker
+                    value={startDate}
+                    onChange={(e) => {
+                        setStartDate(e);}
+                    }
+                />
+            </DemoContainer>
+        </LocalizationProvider>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoContainer components={['DatePicker']}>
+                <DatePicker
+                    value={endDate}
+                    onChange={(e) => {
+                        setEndDate(e);}
+                    }
+                />
+            </DemoContainer>
+        </LocalizationProvider>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoContainer components={['DatePicker']}>
+                <DatePicker
+                    value={firstPayday}
+                    onChange={(e) => {
+                        setFirstPayday(e);}
+                    }
+                />
+            </DemoContainer>
+        </LocalizationProvider>
+        <FormControl>
+            <Select
+                labelId="SalaryFrequency"
+                label="Pay Frequency"
+                value={payFrequency}
+                onChange={(e) => {
+                    setPayFrequency(e.target.value);}
+                }
+            >
+                <MenuItem value={PayFrequencies.Once}>{PayFrequencies.Once}</MenuItem>
+                <MenuItem value={PayFrequencies.Daily}>{PayFrequencies.Daily}</MenuItem>
+                <MenuItem value={PayFrequencies.Weekly}>{PayFrequencies.Weekly}</MenuItem>
+                <MenuItem value={PayFrequencies.Biweekly}>{PayFrequencies.Biweekly}</MenuItem>
+                <MenuItem value={PayFrequencies.Monthly}>{PayFrequencies.Monthly}</MenuItem>
+                <MenuItem value={PayFrequencies.Quarterly}>{PayFrequencies.Quarterly}</MenuItem>
+                <MenuItem value={PayFrequencies.Annually}>{PayFrequencies.Annually}</MenuItem>
+            </Select>
+        </FormControl>
+        </div>
+    );
 }
+// export class FinancialInput {
+//     // Variables
+//     #payFrequency = PayFrequencies.Biweekly;
+//     #startDate;
+//     #payAmount = 0;
 
-export class FinancialInput {
-    // Variables
-    #payFrequency = PayFrequencies.Biweekly;
-    #startDate;
-    #payAmount = 0;
+//     // Constructor
+//     constructor(startDate) {
+//         this.#startDate = startDate;
+//     }
 
-    // Constructor
-    constructor(startDate) {
-        this.#startDate = startDate;
-    }
+//     // Getters
+//     /**
+//      * 
+//      * @returns startDate
+//      */
+//     getStartDate() {
+//         return this.#startDate;
+//     }
 
-    // Getters
-    /**
-     * 
-     * @returns startDate
-     */
-    getStartDate() {
-        return this.#startDate;
-    }
+//     getPayAmount() {
+//         return this.#payAmount;
+//     }
 
-    getPayAmount() {
-        return this.#payAmount;
-    }
+//     // Setters
+//     /**
+//      * Sets the frequency of pay
+//      * @param {PayFrequencies} payFrequency 
+//      */
+//     setPayFrequency(payFrequency) {
+//         this.#payFrequency = payFrequency;
+//     }
 
-    // Setters
-    /**
-     * Sets the frequency of pay
-     * @param {PayFrequencies} payFrequency 
-     */
-    setPayFrequency(payFrequency) {
-        this.#payFrequency = payFrequency;
-    }
+//     setPayAmount(payAmount) {
+//         this.#payAmount = payAmount;
+//     }
 
-    setPayAmount(payAmount) {
-        this.#payAmount = payAmount;
-    }
-
-    setStartDate(startDate) {
-        this.#startDate = startDate;
-    }
-}
+//     setStartDate(startDate) {
+//         this.#startDate = startDate;
+//     }
+// }
