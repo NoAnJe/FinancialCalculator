@@ -7,6 +7,9 @@ import React from 'react';
 //     from './Definitions.js';
 // import {GoalCreation} from './GoalDesign';
 import {OverallDateInput, FinancialGoal} from './Definitions.js';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 
 // let gFinancialGoals = [];
@@ -39,8 +42,10 @@ function App() {
   return (
 
     <div className="App">
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
       <OverallDateInput />
       <FinancialGoal />
+    </LocalizationProvider>
     </div>
   );
 

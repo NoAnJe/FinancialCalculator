@@ -3,9 +3,6 @@ import {TextField, Checkbox, FormControlLabel, MenuItem, Select, FormControl} fr
 import React, {useState} from 'react';
 import { DatePicker } from '@mui/x-date-pickers';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import {
     Unstable_NumberInput as NumberInput,
     NumberInputProps,
@@ -130,15 +127,8 @@ function PayFrequencyMenu() {
                 <PayFrequencyMenu />
             </Select>*/
 
-export function OverallDateInput() {
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
-    const [firstPayday, setFirstPayday] = useState(null);
-    const [payFrequency, setPayFrequency] = useState(PayFrequencies.Biweekly);
+/*
 
-    return (
-        <div>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DemoContainer components={['DatePicker']}>
                 <DatePicker
                     value={startDate}
@@ -147,8 +137,6 @@ export function OverallDateInput() {
                     }
                 />
             </DemoContainer>
-        </LocalizationProvider>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DemoContainer components={['DatePicker']}>
                 <DatePicker
                     value={endDate}
@@ -157,8 +145,6 @@ export function OverallDateInput() {
                     }
                 />
             </DemoContainer>
-        </LocalizationProvider>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DemoContainer components={['DatePicker']}>
                 <DatePicker
                     value={firstPayday}
@@ -167,7 +153,38 @@ export function OverallDateInput() {
                     }
                 />
             </DemoContainer>
-        </LocalizationProvider>
+
+*/
+
+export function OverallDateInput() {
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+    const [firstPayday, setFirstPayday] = useState(null);
+    const [payFrequency, setPayFrequency] = useState(PayFrequencies.Biweekly);
+
+    return (
+        <div>
+                <DatePicker
+                    label="Start Date"
+                    value={startDate}
+                    onChange={(e) => {
+                        setStartDate(e);}
+                    }
+                />
+                <DatePicker
+                    label="End Date"
+                    value={endDate}
+                    onChange={(e) => {
+                        setEndDate(e);}
+                    }
+                />
+                <DatePicker
+                    label="First Payday"
+                    value={firstPayday}
+                    onChange={(e) => {
+                        setFirstPayday(e);}
+                    }
+                />
         <FormControl>
             <Select
                 labelId="SalaryFrequency"
